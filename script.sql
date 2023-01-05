@@ -1,5 +1,11 @@
 -- Active: 1672920260782@@bve2dwhmmyq8qnjk3imc-mysql.services.clever-cloud.com@3306@bve2dwhmmyq8qnjk3imc
 
+/* 
+    Host: bve2dwhmmyq8qnjk3imc-mysql.services.clever-cloud.com
+    User: ut8vvlox26eetjoz
+    Password: DUnKkSJLggjJ0vorUaGg
+    Port: 3306
+ */
 --- Drop des Table
 DROP TABLE IF EXISTS Salle CASCADE;
 DROP TABLE IF EXISTS ELP CASCADE;
