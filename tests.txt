@@ -1,0 +1,29 @@
+--- Insertion des donees
+
+INSERT INTO Salle (NoSalle, Categorie, NbPlaces) VALUES ("101", "Amphi", 100);
+INSERT INTO Salle (NoSalle, Categorie, NbPlaces) VALUES ("102", "Salle", 30);
+INSERT INTO Salle (NoSalle, Categorie, NbPlaces) VALUES ("103", "Salle TP", 30);
+INSERT INTO Groupes (Groupe, Formation, Effectif) VALUES ("Promo","BUT inf 2", 30);
+INSERT INTO Groupes (Groupe, Formation, Effectif) VALUES ("TD4","BUT inf 2", 300);
+INSERT INTO Groupes (Groupe, Formation, Effectif) VALUES ("TD3","BUT inf 1", 20);
+INSERT INTO Groupes (Groupe, Formation, Effectif) VALUES ("TP3","BUT inf P", 32);
+INSERT INTO ELP (CodeELP, NomELP, Formation, HC, HTD, HTP) VALUES (0238,"Math","BUT inf 2",240, 240, 240);
+INSERT INTO ELP (CodeELP, NomELP, Formation, HC, HTD, HTP) VALUES (2638,"Stat","BUT inf 1",240, 240, 240);
+INSERT INTO ELP (CodeELP, NomELP, Formation, HC, HTD, HTP) VALUES (0142,"Dev Web","BUT inf P",240, 240, 240);
+
+
+--- Appel des Procedures
+
+CALL Reserver('102','238', 'TD4','BUT Info 2','TD',STR_TO_DATE('14/12/2022 0830','%d/%m/%Y %H%i'),120);
+CALL Reserver('101','142', 'TD3','BUT Info 3','TD',STR_TO_DATE('12/12/2022 0830','%d/%m/%Y %H%i'),60);
+CALL Reserver('102','2638', 'TD3','BUT Info 1','TD',STR_TO_DATE('12/12/2022 0830','%d/%m/%Y %H%i'),120);
+CALL ReservationsSalle('101');
+CALL ReservationsSalle('102');
+
+
+--- Appel des Fonctions
+
+SELECT TauxOccupationSalle(101, STR_TO_DATE('12/12/2022','%d/%m/%Y'),STR_TO_DATE('14/12/2022 ','%d/%m/%Y'));
+SELECT TauxOccupationSalle(101, STR_TO_DATE('12/12/2022','%d/%m/%Y'),STR_TO_DATE('17/12/2022 ','%d/%m/%Y'));
+SELECT TauxOccupationSalle(101, STR_TO_DATE('16/12/2022','%d/%m/%Y'),STR_TO_DATE('20/12/2022 ','%d/%m/%Y'));
+SELECT TauxOccupationSalle(103, STR_TO_DATE('12/12/2022','%d/%m/%Y'),STR_TO_DATE('14/12/2022 ','%d/%m/%Y'));
