@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS Groupes CASCADE;
 DROP TABLE IF EXISTS Reservation CASCADE;
 DROP PROCEDURE IF EXISTS Reserver;
 DROP PROCEDURE IF EXISTS ReservationsSalle;
+DROP FUNCTION IF EXISTS TauxOccupationSalle;
 
 
 DELIMITER //
@@ -111,8 +112,8 @@ BEGIN
     SELECT CONCAT('Debut: ',r.Debut,' Fin: ', DATE_ADD(r.Debut, INTERVAL r.Duree MINUTE),' CodeELP: ',r.CodeELP,' NomELP: ',ELP.NomELP,' Nature: ',Nature,' Groupe: ',Groupe,' Formation: ',r.Formation )
     FROM Reservation r, ELP
     WHERE r.NoSalle = Salle 
-    AND r.CodeELP = ELP.CodeELP;
-    ORDER BY ASC
+    AND r.CodeELP = ELP.CodeELP
+    ORDER BY Debut ASC;
 END;
 
 
@@ -133,7 +134,7 @@ BEGIN
     DECLARE jours INT(8);
     DECLARE res INT(8);
     DECLARE exis INT(8);
-	SELECT COUNT(NoSalle) INTO exis FROM Reservation WHERE NoSalle = SalleNum;
+	SELECT COUNT(NoSalle) INTO exis FROM Salle WHERE NoSalle = SalleNum;
     IF exis = 0 THEN 
 		RETURN (SELECT "La Salle n'existe pas" message);
 	ELSE 

@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS Groupes CASCADE;
 DROP TABLE IF EXISTS Reservation CASCADE;
 DROP PROCEDURE IF EXISTS Reserver;
 DROP PROCEDURE IF EXISTS ReservationsSalle;
+DROP FUNCTION IF EXISTS TauxOccupationSalle;
 
 
 DELIMITER //
@@ -46,9 +47,9 @@ CREATE TABLE Reservation (
 );
 
 
+---- Projet 4
 --- Creation des Procedure
 DELIMITER //
----- Projet 4
 CREATE PROCEDURE Reserver(SalleNum VARCHAR(8), Code VARCHAR(16), Gpe VARCHAR(16), Forma VARCHAR(16), Nat VARCHAR(16), Deb DATETIME, Dur SMALLINT) 
 BEGIN
     DECLARE nbEffectif SMALLINT;
@@ -86,11 +87,19 @@ BEGIN
     DECLARE debut, fin DATETIME;
     DECLARE code, nat, grp, forma VARCHAR(16);
     DECLARE nom VARCHAR(32);
-    SELECT CONCAT('Debut: ',r.Debut,' Fin: ', DATE_ADD(r.Debut, INTERVAL r.Duree MINUTE),' CodeELP: ',r.CodeELP,' NomELP: ',ELP.NomELP,' Nature: ',Nature,' Groupe: ',Groupe,' Formation: ',r.Formation )
-    FROM Reservation r, ELP
-    WHERE r.NoSalle = Salle 
-    AND r.CodeELP = ELP.CodeELP;
-    ORDER BY ASC
+    DECLARE exis INT(8);
+	SELECT COUNT(NoSalle) INTO exis FROM Salle WHERE NoSalle = SalleNum;
+    IF exis = 0 THEN 
+		 SELECT "La Salle n'existe pas" message;
+	ELSEIF (SELECT COUNT(*) FROM Reservation WHERE NoSalle = SalleNum) = 0 THEN
+		SELECT "La Salle n'est pas reservé" message;
+    ELSE
+		SELECT CONCAT('Debut: ',r.Debut,' Fin: ', DATE_ADD(r.Debut, INTERVAL r.Duree MINUTE),' CodeELP: ',r.CodeELP,' NomELP: ',ELP.NomELP,' Nature: ',Nature,' Groupe: ',Groupe,' Formation: ',r.Formation )
+		FROM Reservation r, ELP
+		WHERE r.NoSalle = SalleNum 
+		AND r.CodeELP = ELP.CodeELP
+		ORDER BY Debut ASC;
+	END IF;
 END;
 
 --- Create des Fonctions
@@ -104,7 +113,7 @@ BEGIN
     DECLARE jours INT(8);
     DECLARE res INT(8);
     DECLARE exis INT(8);
-	SELECT COUNT(NoSalle) INTO exis FROM Reservation WHERE NoSalle = SalleNum;
+	SELECT COUNT(NoSalle) INTO exis FROM Salle WHERE NoSalle = SalleNum;
     IF exis = 0 THEN 
 		RETURN (SELECT "La Salle n'existe pas" message);
 	ELSE 
